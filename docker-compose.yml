@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./model:/app/model
+      - db_volume:/app/db
+    depends_on:
+      - db
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  db:
+    image: nouchka/sqlite3:latest
+    volumes:
+      - db_volume:/app/db
+    environment:
+      - SQLITE_DATABASE=predictions.db
+
+volumes:
+  db_volume:
